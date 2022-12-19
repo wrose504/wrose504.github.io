@@ -17,7 +17,6 @@
       padding: 0.2em;
     }
   </style>
-  <script type="application/javascript" src="//wrose504.github.io/frontchat/flake.js"></script>
   <script type="application/javascript">
     window.onload = function () {
       const log = (message) => {
@@ -44,7 +43,11 @@
         chatScript.onload = function () {
           console.log('Loaded chat script!!');
         };
-        chatScript.src = 'https://chat-assets.frontapp.com/v1/chat.bundle.js';
+        chatScript.onerror = function (evt) {
+          console.log('Loading chat script failed!!', evt);
+        };
+        // chatScript.src = 'https://chat-assets.frontapp.com/v1/chat.bundle.js';
+        chatScript.src = 'https://wrose504.github.io/frontchat/flake.js';
         document.body.append(chatScript);
       };
 
