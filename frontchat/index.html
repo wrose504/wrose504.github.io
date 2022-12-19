@@ -1,0 +1,98 @@
+<html>
+
+<head>
+  <style type="text/css">
+    body {
+      font-family: system-ui;
+    }
+
+    #buttons {
+      display: flex;
+      flex-direction: row;
+      gap: 0.5em;
+    }
+
+    #log {
+      border: 1px solid gray;
+      padding: 0.2em;
+    }
+  </style>
+  <script type="application/javascript" src="https://wrose504.github.com/frontchat/flake.js"></script>
+  <script type="application/javascript">
+    window.onload = function () {
+      const log = (message) => {
+        const logElement = document.getElementById('log');
+
+        if (!message.endsWith('\n')) message = message + '\n';
+
+        const messageText = document.createTextNode(message);
+        logElement.appendChild(messageText);
+      };
+
+      const frontApiKey = '0f7c9a66a06bb40ad6a087f3c189d771';
+      let chatScript;
+
+      document.getElementById('button-load').onclick = () => {
+        log('Clicked load');
+        if (chatScript) {
+          log(' >> Already loaded');
+          return;
+        }
+
+        globalThis.frontApiKey = frontApiKey;
+        chatScript = document.createElement('script');
+        chatScript.onload = function () {
+          console.log('Loaded chat script!!');
+        };
+        chatScript.src = 'https://chat-assets.frontapp.com/v1/chat.bundle.js';
+        document.body.append(chatScript);
+      };
+
+      document.getElementById('button-init').onclick = () => {
+        log('Clicked init');
+        if (window.FrontChat) {
+          try {
+            window.FrontChat('init', { chatId: frontApiKey, useDefaultLauncher: true });
+          } catch (err) {
+            if (err && err.message) {
+              log('FrontChat init failed: ' + ((err && err.message) || String(err)));
+            }
+            throw err;
+          }
+        } else {
+          log(' >> API not present');
+        }
+      };
+
+      document.getElementById('button-shutdown').onclick = () => {
+        log('Clicked shutdown');
+        if (window.FrontChat) {
+          try {
+            window.FrontChat('shutdown');
+          } catch (err) {
+            if (err && err.message) {
+              log('FrontChat shutdown failed: ' + ((err && err.message) || String(err)));
+            }
+          }
+        } else {
+          log(' >> API not present');
+        }
+      };
+    };
+  </script>
+</head>
+
+<body>
+  <h1>👋 Hello World!</h1>
+  <div>
+    <div id='buttons'>
+      <button id='button-load'>Load</button>
+      <button id='button-init'>Init</button>
+      <button id='button-shutdown'>Shutdown</button>
+    </div>
+
+    <pre id='log'></pre>
+  </div>
+</body>
+
+</html>
