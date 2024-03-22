@@ -82,6 +82,14 @@
       #debug-area pre.input-event {
         background-color: rgb(137, 246, 226);
       }
+
+      #debug-area pre.click-event {
+        background-color: rgb(246, 137, 193);
+      }
+
+      #debug-area pre.submit-event {
+        background-color: rgb(246, 186, 137);
+      }
     </style>
   </head>
   <body>
@@ -103,7 +111,14 @@
       />
       <label for="email">Email:</label>
       <input type="email" id="email" name="email" autocomplete="email" />
-      <button id="submit" type="submit">Submit</button>
+      <label for="address">Address:</label>
+      <input
+        type="address"
+        id="address"
+        name="address"
+        autocomplete="street-address"
+      />
+      <button id="submit-button" type="submit">Submit</button>
     </form>
 
     <div id="debug-area"></div>
@@ -114,7 +129,8 @@
         const firstName = document.getElementById("first-name");
         const lastName = document.getElementById("last-name");
         const email = document.getElementById("email");
-        const submitButton = document.getElementById("submit");
+        const address = document.getElementById("address");
+        const submitButton = document.getElementById("submit-button");
         const debugArea = document.getElementById("debug-area");
 
         function log(message) {
@@ -146,7 +162,7 @@
           report(event);
         };
 
-        for (const input of [firstName, lastName, email]) {
+        for (const input of [firstName, lastName, email, address]) {
           input.onchange = report;
           input.oninput = report;
           input.onfocus = report;
