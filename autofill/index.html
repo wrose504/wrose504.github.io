@@ -1,0 +1,160 @@
+<html>
+  <head>
+    <title>Autofill Sucks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <style type="text/css">
+      html,
+      body {
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 10pt;
+      }
+
+      body {
+        max-width: 800px;
+        margin-inline: auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      #autofill-form {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto;
+        align-items: baseline;
+        column-gap: 16px;
+        row-gap: 8px;
+      }
+
+      #autofill-form label {
+        grid-column-start: 1;
+        font-weight: bold;
+      }
+
+      #autofill-form input {
+        padding: 4px;
+        border-radius: 4px;
+      }
+
+      #autofill-form button {
+        justify-self: center;
+        grid-column: 1 / 3;
+      }
+
+      #debug-area {
+        flex: 1 1 auto;
+
+        padding: 8px;
+        border: 1px solid gray;
+        font-size: 10pt;
+        max-height: 12li;
+        overflow: auto;
+
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: stretch;
+      }
+
+      #debug-area pre {
+        margin: 0;
+        padding: 8px;
+      }
+
+      #debug-area pre.blur-event {
+        background-color: rgb(149, 154, 228);
+      }
+
+      #debug-area pre.change-event {
+        background-color: rgb(134, 198, 255);
+      }
+
+      #debug-area pre.focus-event {
+        background-color: rgb(242, 244, 130);
+      }
+
+      #debug-area pre.input-event {
+        background-color: rgb(137, 246, 226);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Autofill Sucks</h1>
+    <form id="autofill-form">
+      <label for="email">First name:</label>
+      <input
+        type="text"
+        id="first-name"
+        name="first-name"
+        autocomplete="given-name"
+      />
+      <label for="email">Last name:</label>
+      <input
+        type="text"
+        id="last-name"
+        name="last-name"
+        autocomplete="family-name"
+      />
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" autocomplete="email" />
+      <button id="submit" type="submit">Submit</button>
+    </form>
+
+    <div id="debug-area"></div>
+
+    <script type="application/javascript">
+      window.onload = function () {
+        const form = document.getElementById("autofill-form");
+        const firstName = document.getElementById("first-name");
+        const lastName = document.getElementById("last-name");
+        const email = document.getElementById("email");
+        const submitButton = document.getElementById("submit");
+        const debugArea = document.getElementById("debug-area");
+
+        function log(message) {
+          debugArea.appendChild(document.createTextNode(message + "\n"));
+        }
+
+        let lastEventKey = undefined;
+
+        function report(event) {
+          const eventKey = [event.type + "-event", event.target.id].join(" ");
+          const eventText = `Event: ${event.type} ${event.target.id}\nValue: ${event.target.value}`;
+
+          if (eventKey !== lastEventKey) {
+            // Add a new child
+            pre = document.createElement("pre");
+            pre.className = eventKey;
+            pre.appendChild(document.createTextNode(eventText));
+            debugArea.appendChild(pre);
+          } else {
+            // Replace last child
+            debugArea.lastElementChild.textContent = eventText;
+          }
+
+          lastEventKey = eventKey;
+        }
+
+        form.onsubmit = function (event) {
+          event.preventDefault();
+          report(event);
+        };
+
+        for (const input of [firstName, lastName, email]) {
+          input.onchange = report;
+          input.oninput = report;
+          input.onfocus = report;
+          input.onblur = report;
+        }
+
+        submitButton.onclick = report;
+      };
+    </script>
+  </body>
+</html>
