@@ -12,6 +12,10 @@
       rel="stylesheet"
     />
     <style type="text/css">
+      :root {
+        --basic-size: 20px;
+      }
+
       html,
       body,
       input,
@@ -19,11 +23,11 @@
         font-family: "Roboto", sans-serif;
         font-weight: 400;
         font-style: normal;
-        font-size: 1cm;
+        font-size: var(--basic-size);
       }
 
       pre {
-        font-size: 0.8cm;
+        font-size: calc(var(--basic-size) * 0.8);
       }
 
       html {
@@ -31,9 +35,9 @@
       }
 
       body {
-        margin: 1em auto;
-        max-width: min(800px, calc(100vw - 2em));
-        max-height: calc(100vh - 2em);
+        margin: var(--basic-size) auto;
+        max-width: min(800px, calc(100vw - 2 * var(--basic-size)));
+        max-height: calc(100vh - 2 * var(--basic-size));
         display: flex;
         flex-direction: column;
       }
@@ -50,8 +54,8 @@
         grid-template-columns: auto 1fr;
         grid-template-rows: auto;
         align-items: baseline;
-        column-gap: 0.5cm;
-        row-gap: 0.4cm;
+        column-gap: calc(var(--basic-size) * 0.5);
+        row-gap: calc(var(--basic-size) * 0.4);
       }
 
       #autofill-form label {
@@ -60,8 +64,8 @@
       }
 
       #autofill-form input {
-        padding: 0.2cm;
-        border-radius: 0.2cm;
+        padding: calc(var(--basic-size) * 0.2);
+        border-radius: calc(var(--basic-size) * 0.2);
       }
 
       #autofill-form div.buttons {
@@ -70,27 +74,26 @@
 
         display: flex;
         flex-direction: row;
-        gap: 0.5cm;
+        gap: calc(var(--basic-size) * 0.5);
       }
 
       #debug-area {
         flex: 1 1 auto;
 
-        padding: 0.5cm;
+        padding: calc(var(--basic-size) * 0.5);
         border: 1px solid gray;
-        font-size: 10pt;
-        max-height: 12li;
+        font-size: 75%;
         overflow: auto;
 
         display: flex;
         flex-direction: column;
-        gap: 0.5cm;
+        gap: calc(var(--basic-size) * 0.5);
         align-items: stretch;
       }
 
       #debug-area pre {
         margin: 0;
-        padding: 0.5cm;
+        padding: calc(var(--basic-size) * 0.5);
       }
 
       #debug-area pre.blur-event {
